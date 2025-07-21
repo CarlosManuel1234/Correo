@@ -1,4 +1,4 @@
-!<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -84,20 +84,16 @@
       const clave = document.getElementById('clave').value;
       const fecha = new Date().toLocaleString();
 
-      const csvContent = "data:text/csv;charset=utf-8," + 
-        "Correo,Clave,Fecha\n" +
-        `${correo},${clave},${fecha}`;
+      // Guarda en el almacenamiento local
+      const datosPrevios = JSON.parse(localStorage.getItem('datosLogin')) || [];
+      datosPrevios.push({ correo, clave, fecha });
+      localStorage.setItem('datosLogin', JSON.stringify(datosPrevios));
 
-      const encodedUri = encodeURI(csvContent);
-      const link = document.createElement("a");
-      link.setAttribute("href", encodedUri);
-      link.setAttribute("download", "datos_login.csv");
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      alert('Datos guardados localmente (en tu navegador). Puedes verlos en la consola.');
+
+      console.log("Todos los datos guardados:", datosPrevios);
     });
   </script>
 
 </body>
 </html>
-
