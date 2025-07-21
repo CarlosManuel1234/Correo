@@ -84,14 +84,15 @@
       const clave = document.getElementById('clave').value;
       const fecha = new Date().toLocaleString();
 
-      // Guarda en el almacenamiento local
-      const datosPrevios = JSON.parse(localStorage.getItem('datosLogin')) || [];
-      datosPrevios.push({ correo, clave, fecha });
-      localStorage.setItem('datosLogin', JSON.stringify(datosPrevios));
+      const contenido = "Correo,Clave,Fecha\n" + `${correo},${clave},${fecha}`;
+      const blob = new Blob([contenido], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
 
-      alert('Datos guardados localmente (en tu navegador). Puedes verlos en la consola.');
-
-      console.log("Todos los datos guardados:", datosPrevios);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'datos_login.csv';
+      a.click();
+      URL.revokeObjectURL(url);
     });
   </script>
 
